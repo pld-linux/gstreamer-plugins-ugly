@@ -10,7 +10,7 @@ Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl):	Brzydkie wtyczki do ¶rodowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
 Version:	0.10.3
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.bz2
@@ -23,7 +23,7 @@ BuildRequires:	glib2-devel >= 1:2.6.0
 BuildRequires:	gstreamer-devel >= %{gst_req_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gst_req_ver}
 BuildRequires:	gtk-doc >= 1.3
-BuildRequires:	liboil-devel >= 0.3.0
+BuildRequires:	liboil-devel >= 1:0.3.6
 BuildRequires:	libtool >= 1.4
 BuildRequires:	pkgconfig >= 1:0.9.0
 ##
