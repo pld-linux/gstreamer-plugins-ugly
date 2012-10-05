@@ -5,20 +5,21 @@
 %bcond_without	amr		# AMR-NB/AMR-WB plugins
 
 %define		gstname		gst-plugins-ugly
-%define		gst_major_ver	0.10
-%define		gst_req_ver	0.10.36
-%define		gstpb_req_ver	0.10.36
+%define		gst_major_ver	1.0
+%define		gst_req_ver	1.0.0
+%define		gstpb_req_ver	1.0.0
 
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	0.10.19
-Release:	2
+Version:	1.0.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	ba26045c8c8c91f0d48d327ccf53ac0c
+# Source0-md5:	7f20303caf4305278573fb7ef73a07b7
+Patch0:		%{name}-x264.patch
 URL:		http://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.10
@@ -212,6 +213,7 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 
 %prep
 %setup -q -n %{gstname}-%{version}
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -238,7 +240,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 # We don't need plugins' *.la files
-rm -f $RPM_BUILD_ROOT%{gstlibdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/*.la
 
 %find_lang %{gstname}-%{gst_major_ver}
 
@@ -251,11 +253,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibdir}/libgstasf.so
 %attr(755,root,root) %{gstlibdir}/libgstdvdlpcmdec.so
 %attr(755,root,root) %{gstlibdir}/libgstdvdsub.so
-%attr(755,root,root) %{gstlibdir}/libgstiec958.so
 %attr(755,root,root) %{gstlibdir}/libgstrmdemux.so
-%attr(755,root,root) %{gstlibdir}/libgstsynaesthesia.so
+%attr(755,root,root) %{gstlibdir}/libgstxingmux.so
 %{_datadir}/gstreamer-%{gst_major_ver}/presets
-%{_gtkdocdir}/gst-plugins-ugly-plugins-0.10
+%{_gtkdocdir}/gst-plugins-ugly-plugins-1.0
 
 ##
 ## Plugins
@@ -297,8 +298,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gstreamer-mpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgstmpeg2dec.so
-%attr(755,root,root) %{gstlibdir}/libgstmpegaudioparse.so
-%attr(755,root,root) %{gstlibdir}/libgstmpegstream.so
 
 %if %{with sid}
 %files -n gstreamer-sid
