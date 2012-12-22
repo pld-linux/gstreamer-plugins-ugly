@@ -13,19 +13,19 @@
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.0.3
+Version:	1.0.4
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	62c94e4e2f4a4a734d6009d1f59ca376
+# Source0-md5:	a40f3da59e420b4efb29f4d69ea324d3
 Patch0:		%{name}-x264.patch
 URL:		http://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.62
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-devel >= 0.17
-BuildRequires:	glib2-devel >= 1:2.24
+BuildRequires:	glib2-devel >= 1:2.32.0
 BuildRequires:	gstreamer-devel >= %{gst_req_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_req_ver}
 BuildRequires:	gtk-doc >= 1.12
@@ -50,10 +50,10 @@ BuildRequires:	libmpeg2-devel >= 0.5.1
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
 # ABI 120
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
-%{?with_amr:BuildRequires:	opencore-amr-devel}
+%{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
 BuildRequires:	rpmbuild(macros) >= 1.98
 BuildRequires:	twolame-devel >= 0.3.10
-Requires:	glib2 >= 1:2.24
+Requires:	glib2 >= 1:2.32.0
 Requires:	gstreamer >= %{gst_req_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
 Requires:	orc >= 0.4.16
@@ -99,6 +99,7 @@ Summary:	GStreamer AMR-NB decoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-NB
 Group:		Libraries
 Requires:	gstreamer >= %{gst_req_ver}
+Requires:	opencore-amr >= 0.1.3
 
 %description -n gstreamer-amrnb
 Plugin for decoding of AMR-NB files.
@@ -111,6 +112,7 @@ Summary:	GStreamer AMR-WB decoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-WB
 Group:		Libraries
 Requires:	gstreamer >= %{gst_req_ver}
+Requires:	opencore-amr >= 0.1.3
 
 %description -n gstreamer-amrwb
 Plugin for decoding of AMR-WB files.
