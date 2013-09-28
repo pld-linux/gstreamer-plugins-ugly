@@ -20,7 +20,7 @@ Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
 # Source0-md5:	81c97981ed373bd77bb10f2ae555c166
 URL:		http://gstreamer.freedesktop.org/
-BuildRequires:	autoconf >= 2.62
+BuildRequires:	autoconf >= 2.68
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-devel >= 0.17
