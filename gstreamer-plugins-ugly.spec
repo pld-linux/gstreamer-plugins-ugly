@@ -1,30 +1,31 @@
 #
 # Conditional build:
-%bcond_without	cdio		# cdio plugin
-%bcond_without	sid		# sid plugin
 %bcond_without	amr		# AMR-NB/AMR-WB plugins
+%bcond_without	cdio		# cdio plugin
+%bcond_without	mpg123		# MPG123-based MP3 plugin
+%bcond_without	sid		# sid plugin
 
 %define		gstname		gst-plugins-ugly
 %define		gst_major_ver	1.0
-%define		gst_req_ver	1.6.3
-%define		gstpb_req_ver	1.6.3
+%define		gst_req_ver	1.8.0
+%define		gstpb_req_ver	1.8.0
 
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.6.3
+Version:	1.8.1
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	dbd92afb3816cbfa90ab1f197144a2e2
-URL:		http://gstreamer.freedesktop.org/
+Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
+# Source0-md5:	b6f47bcb3d924f7ef8a8b33ac4d037ab
+URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.32.0
+BuildRequires:	glib2-devel >= 1:2.40.0
 BuildRequires:	gstreamer-devel >= %{gst_req_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_req_ver}
 BuildRequires:	gtk-doc >= 1.12
@@ -44,12 +45,13 @@ BuildRequires:	lame-libs-devel
 BuildRequires:	libdvdread-devel
 BuildRequires:	libmad-devel >= 0.15
 BuildRequires:	libmpeg2-devel >= 0.5.1
+%{?with_mpg123:BuildRequires:	libmpg123-devel >= 1.14}
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
 # ABI 120
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
 %{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
 BuildRequires:	twolame-devel >= 0.3.10
-Requires:	glib2 >= 1:2.32.0
+Requires:	glib2 >= 1:2.40.0
 Requires:	gstreamer >= %{gst_req_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
 Requires:	orc >= 0.4.16
@@ -195,6 +197,20 @@ Plugins for playing MPEG videos.
 %description -n gstreamer-mpeg -l pl.UTF-8
 Wtyczki do odtwarzania obrazu MPEG.
 
+%package -n gstreamer-mpg123
+Summary:	GStreamer mpg123 plugin
+Summary(pl.UTF-8):	Wtyczka mpg123 do GStreamera
+Group:		Libraries
+Requires:	gstreamer >= %{gst_req_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	libmpg123 >= 1.14
+
+%description -n gstreamer-mpg123
+GStreamer mpg123 plugin for MP3 playback.
+
+%description -n gstreamer-mpg123 -l pl.UTF-8
+Wtyczka mpg123 do GStreamera, odtwarzająca MP3.
+
 %package -n gstreamer-sid
 Summary:	GStreamer Sid C64 music plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca muzykę Sid C64
@@ -307,6 +323,12 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gstreamer-mpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgstmpeg2dec.so
+
+%if %{with mpg123}
+%files -n gstreamer-mpg123
+%defattr(644,root,root,755)
+%attr(755,root,root) %{gstlibdir}/libgstmpg123.so
+%endif
 
 %if %{with sid}
 %files -n gstreamer-sid
