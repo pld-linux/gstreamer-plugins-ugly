@@ -7,19 +7,19 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gst_major_ver	1.0
-%define		gst_req_ver	1.10.0
-%define		gstpb_req_ver	1.10.0
+%define		gst_req_ver	1.12.0
+%define		gstpb_req_ver	1.12.0
 
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.10.2
+Version:	1.12.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	c157f3fcb87db2a0f457667f3d3e6a26
+# Source0-md5:	30e815834819a4890eb1ef6ef67cf68d
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
@@ -43,7 +43,6 @@ BuildRequires:	a52dec-libs-devel
 BuildRequires:	lame-libs-devel
 %{?with_cdio:BuildRequires:	libcdio-devel >= 0.76}
 BuildRequires:	libdvdread-devel
-BuildRequires:	libmad-devel >= 0.15
 BuildRequires:	libmpeg2-devel >= 0.5.1
 %{?with_mpg123:BuildRequires:	libmpg123-devel >= 1.14}
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
@@ -170,20 +169,6 @@ Plugin for encoding MP3 with lame.
 %description -n gstreamer-lame -l pl.UTF-8
 Wtyczka do GStreamera kodująca pliki MP3 przy użyciu lame.
 
-%package -n gstreamer-mad
-Summary:	GStreamer plugin using MAD for MP3 decoding
-Summary(pl.UTF-8):	Wtyczka do GStreamera używająca MAD do dekodowania MP3
-Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
-
-%description -n gstreamer-mad
-Plugin for playback of MP3 songs using the very good MAD library.
-
-%description -n gstreamer-mad -l pl.UTF-8
-Wtyczka do odtwarzania plików MP3 przy użyciu bardzo dobrej biblioteki
-MAD.
-
 %package -n gstreamer-mpeg
 Summary:	GStreamer plugins for MPEG video playback
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca obraz MPEG
@@ -204,6 +189,8 @@ Group:		Libraries
 Requires:	gstreamer >= %{gst_req_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
 Requires:	libmpg123 >= 1.14
+# plugin obsoleted in 1.12.0, functionality in mpg123 plugin (or libav)
+Obsoletes:	gstreamer-mad < 1.12.0
 
 %description -n gstreamer-mpg123
 GStreamer mpg123 plugin for MP3 playback.
@@ -278,7 +265,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibdir}/libgstasf.so
 %attr(755,root,root) %{gstlibdir}/libgstdvdlpcmdec.so
 %attr(755,root,root) %{gstlibdir}/libgstdvdsub.so
-%attr(755,root,root) %{gstlibdir}/libgstrmdemux.so
+%attr(755,root,root) %{gstlibdir}/libgstrealmedia.so
 %attr(755,root,root) %{gstlibdir}/libgstxingmux.so
 %{_datadir}/gstreamer-%{gst_major_ver}/presets
 %{_gtkdocdir}/gst-plugins-ugly-plugins-1.0
@@ -315,10 +302,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgstlame.so
 %attr(755,root,root) %{gstlibdir}/libgsttwolame.so
-
-%files -n gstreamer-mad
-%defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstmad.so
 
 %files -n gstreamer-mpeg
 %defattr(644,root,root,755)
