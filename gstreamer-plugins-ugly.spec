@@ -2,24 +2,23 @@
 # Conditional build:
 %bcond_without	amr		# AMR-NB/AMR-WB plugins
 %bcond_without	cdio		# cdio plugin
-%bcond_without	mpg123		# MPG123-based MP3 plugin
 %bcond_without	sid		# sid plugin
 
 %define		gstname		gst-plugins-ugly
 %define		gst_major_ver	1.0
-%define		gst_req_ver	1.12.0
-%define		gstpb_req_ver	1.12.0
+%define		gst_req_ver	1.14.0
+%define		gstpb_req_ver	1.14.0
 
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.12.4
-Release:	2
+Version:	1.14.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	e2b836fb2747f6ae3a1a6f33a9d8c952
+# Source0-md5:	bcb1f8d9339176aee2b5da2a9cb2df88
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
@@ -40,24 +39,23 @@ BuildRequires:	xz
 ## plugins
 ##
 BuildRequires:	a52dec-libs-devel
-BuildRequires:	lame-libs-devel
 %{?with_cdio:BuildRequires:	libcdio-devel >= 0.76}
 BuildRequires:	libdvdread-devel
 BuildRequires:	libmpeg2-devel >= 0.5.1
-%{?with_mpg123:BuildRequires:	libmpg123-devel >= 1.14}
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
 # ABI 120
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
 %{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
-BuildRequires:	twolame-devel >= 0.3.10
 Requires:	glib2 >= 1:2.40.0
 Requires:	gstreamer >= %{gst_req_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
 Requires:	orc >= 0.4.16
 Obsoletes:	gstreamer-asf
+Obsoletes:	gstreamer-lame
+Obsoletes:	gstreamer-mpg123
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		gstlibdir 	%{_libdir}/gstreamer-%{gst_major_ver}
+%define		gstlibdir	%{_libdir}/gstreamer-%{gst_major_ver}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -153,22 +151,6 @@ GStreamer plugin for DVD playback.
 %description -n gstreamer-dvdread -l pl.UTF-8
 Wtyczka odtwarzająca DVD do GStreamera.
 
-%package -n gstreamer-lame
-Summary:	GStreamer plugin encoding MP3 songs
-Summary(pl.UTF-8):	Wtyczka do GStreamera kodująca pliki MP3
-Group:		Libraries
-# for NLS
-Requires:	%{name} = %{version}-%{release}
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
-Requires:	twolame-libs >= 0.3.10
-
-%description -n gstreamer-lame
-Plugin for encoding MP3 with lame.
-
-%description -n gstreamer-lame -l pl.UTF-8
-Wtyczka do GStreamera kodująca pliki MP3 przy użyciu lame.
-
 %package -n gstreamer-mpeg
 Summary:	GStreamer plugins for MPEG video playback
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca obraz MPEG
@@ -181,22 +163,6 @@ Plugins for playing MPEG videos.
 
 %description -n gstreamer-mpeg -l pl.UTF-8
 Wtyczki do odtwarzania obrazu MPEG.
-
-%package -n gstreamer-mpg123
-Summary:	GStreamer mpg123 plugin
-Summary(pl.UTF-8):	Wtyczka mpg123 do GStreamera
-Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
-Requires:	libmpg123 >= 1.14
-# plugin obsoleted in 1.12.0, functionality in mpg123 plugin (or libav)
-Obsoletes:	gstreamer-mad < 1.12.0
-
-%description -n gstreamer-mpg123
-GStreamer mpg123 plugin for MP3 playback.
-
-%description -n gstreamer-mpg123 -l pl.UTF-8
-Wtyczka mpg123 do GStreamera, odtwarzająca MP3.
 
 %package -n gstreamer-sid
 Summary:	GStreamer Sid C64 music plugin
@@ -298,20 +264,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgstdvdread.so
 
-%files -n gstreamer-lame
-%defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstlame.so
-%attr(755,root,root) %{gstlibdir}/libgsttwolame.so
-
 %files -n gstreamer-mpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgstmpeg2dec.so
-
-%if %{with mpg123}
-%files -n gstreamer-mpg123
-%defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstmpg123.so
-%endif
 
 %if %{with sid}
 %files -n gstreamer-sid
