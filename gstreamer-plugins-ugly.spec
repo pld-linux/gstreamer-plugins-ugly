@@ -5,9 +5,9 @@
 %bcond_without	sid		# sid plugin
 
 %define		gstname		gst-plugins-ugly
-%define		gst_major_ver	1.0
-%define		gst_req_ver	1.16.0
-%define		gstpb_req_ver	1.16.0
+%define		gstmver		1.0
+%define		gst_ver		1.16.0
+%define		gstpb_ver	1.16.0
 
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
@@ -25,8 +25,8 @@ BuildRequires:	automake >= 1:1.14
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= 1:2.40.0
-BuildRequires:	gstreamer-devel >= %{gst_req_ver}
-BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_req_ver}
+BuildRequires:	gstreamer-devel >= %{gst_ver}
+BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
 BuildRequires:	gtk-doc >= 1.12
 BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	orc-devel >= 0.4.16
@@ -47,13 +47,13 @@ BuildRequires:	libmpeg2-devel >= 0.5.1
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
 %{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
 Requires:	glib2 >= 1:2.40.0
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	orc >= 0.4.16
 Obsoletes:	gstreamer-asf
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		gstlibdir	%{_libdir}/gstreamer-%{gst_major_ver}
+%define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -79,8 +79,8 @@ nowych typów danych lub możliwości obróbki.
 Summary:	GStreamer VOB decoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca VOB
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 
 %description -n gstreamer-a52dec
 Plugin for decoding of VOB files.
@@ -92,8 +92,8 @@ Wtyczka dekodująca pliki VOB.
 Summary:	GStreamer AMR-NB decoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-NB
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	opencore-amr >= 0.1.3
 
 %description -n gstreamer-amrnb
@@ -106,8 +106,8 @@ Wtyczka dekodująca pliki AMR-NB.
 Summary:	GStreamer AMR-WB decoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-WB
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	opencore-amr >= 0.1.3
 
 %description -n gstreamer-amrwb
@@ -120,8 +120,8 @@ Wtyczka dekodująca pliki AMR-WB.
 Summary:	GStreamer plugin for CD audio input using libcdio
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca płyty CD-Audio przy użyciu libcdio
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	libcdio >= 0.76
 # for NLS
 Requires:	%{name} = %{version}-%{release}
@@ -139,8 +139,8 @@ Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca DVD
 Group:		Libraries
 # for NLS
 Requires:	%{name} = %{version}-%{release}
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Obsoletes:	gstreamer-libdvdread
 
 %description -n gstreamer-dvdread
@@ -153,8 +153,8 @@ Wtyczka odtwarzająca DVD do GStreamera.
 Summary:	GStreamer plugins for MPEG video playback
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca obraz MPEG
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 
 %description -n gstreamer-mpeg
 Plugins for playing MPEG videos.
@@ -166,8 +166,8 @@ Wtyczki do odtwarzania obrazu MPEG.
 Summary:	GStreamer Sid C64 music plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca muzykę Sid C64
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 
 %description -n gstreamer-sid
 Plugin for playback of C64 SID format music files.
@@ -179,8 +179,8 @@ Wtyczka do odtwarzania plików z muzyką w formacie C64 SID.
 Summary:	GStreamer x264 encoder plugin
 Summary(pl.UTF-8):	Wtyczka do GStreamera kodująca przy użyciu biblioteki x264
 Group:		Libraries
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gst_req_ver}
+Requires:	gstreamer >= %{gst_ver}
+Requires:	gstreamer-plugins-base >= %{gst_ver}
 
 %description -n gstreamer-x264
 GStreamer x264 encoder plugin.
@@ -218,12 +218,12 @@ rm -rf $RPM_BUILD_ROOT
 # We don't need plugins' *.la files
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/*.la
 
-%find_lang %{gstname}-%{gst_major_ver}
+%find_lang %{gstname}-%{gstmver}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f %{gstname}-%{gst_major_ver}.lang
+%files -f %{gstname}-%{gstmver}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README RELEASE
 %attr(755,root,root) %{gstlibdir}/libgstasf.so
@@ -231,7 +231,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibdir}/libgstdvdsub.so
 %attr(755,root,root) %{gstlibdir}/libgstrealmedia.so
 %attr(755,root,root) %{gstlibdir}/libgstxingmux.so
-%{_datadir}/gstreamer-%{gst_major_ver}/presets
+%{_datadir}/gstreamer-%{gstmver}/presets
 %{_gtkdocdir}/gst-plugins-ugly-plugins-1.0
 
 ##
