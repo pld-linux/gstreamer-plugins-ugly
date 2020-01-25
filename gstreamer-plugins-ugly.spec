@@ -9,7 +9,6 @@
 %define		gst_ver		1.16.0
 %define		gstpb_ver	1.16.0
 
-%include	/usr/lib/rpm/macros.gstreamer
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
