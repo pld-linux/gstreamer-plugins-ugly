@@ -6,18 +6,18 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.16.0
-%define		gstpb_ver	1.16.0
+%define		gst_ver		1.16.2
+%define		gstpb_ver	1.16.2
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.16.0
-Release:	2
+Version:	1.16.2
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	1ec343c58d4b17d682f7befa8453c11c
+# Source0-md5:	10283ff5ef1e34d462dde77042e329bd
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
