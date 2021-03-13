@@ -6,18 +6,18 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.16.2
-%define		gstpb_ver	1.16.2
+%define		gst_ver		1.16.3
+%define		gstpb_ver	1.16.3
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.16.2
-Release:	2
+Version:	1.16.3
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	10283ff5ef1e34d462dde77042e329bd
+# Source0-md5:	b025125a6c928024cbd300cc27b5d712
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
@@ -49,7 +49,7 @@ Requires:	glib2 >= 1:2.40.0
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	orc >= 0.4.16
-Obsoletes:	gstreamer-asf
+Obsoletes:	gstreamer-asf < 0.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
@@ -140,7 +140,7 @@ Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
-Obsoletes:	gstreamer-libdvdread
+Obsoletes:	gstreamer-libdvdread < 0.11
 
 %description -n gstreamer-dvdread
 GStreamer plugin for DVD playback.
