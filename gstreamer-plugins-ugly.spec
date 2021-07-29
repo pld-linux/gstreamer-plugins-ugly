@@ -1,37 +1,38 @@
 #
 # Conditional build:
+%bcond_without	apidocs		# API documentation
 %bcond_without	amr		# AMR-NB/AMR-WB plugins
 %bcond_without	cdio		# cdio plugin
 %bcond_without	sid		# sid plugin
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.16.3
-%define		gstpb_ver	1.16.3
+%define		gst_ver		1.18.4
+%define		gstpb_ver	1.18.4
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.16.3
+Version:	1.18.4
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	b025125a6c928024cbd300cc27b5d712
+# Source0-md5:	e5fbd9a8a05632cfb9d0afd0ad856d52
 URL:		https://gstreamer.freedesktop.org/
-BuildRequires:	autoconf >= 2.69
-BuildRequires:	automake >= 1:1.14
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.40.0
+BuildRequires:	glib2-devel >= 1:2.44.0
 BuildRequires:	gstreamer-devel >= %{gst_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
-BuildRequires:	gtk-doc >= 1.12
-BuildRequires:	libtool >= 2:2.2.6
+%{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
+BuildRequires:	meson >= 0.48
+BuildRequires:	ninja >= 1.5
 BuildRequires:	orc-devel >= 0.4.16
 BuildRequires:	pkgconfig >= 1:0.9.0
-BuildRequires:	python >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.98
+BuildRequires:	python3 >= 1:3.2
+BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 ##
@@ -39,13 +40,13 @@ BuildRequires:	xz
 ##
 BuildRequires:	a52dec-libs-devel
 %{?with_cdio:BuildRequires:	libcdio-devel >= 0.76}
-BuildRequires:	libdvdread-devel
+BuildRequires:	libdvdread-devel >= 0.5.0
 BuildRequires:	libmpeg2-devel >= 0.5.1
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
 # ABI 120
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
 %{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
-Requires:	glib2 >= 1:2.40.0
+Requires:	glib2 >= 1:2.44.0
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	orc >= 0.4.16
@@ -69,6 +70,19 @@ tej biblioteki mogą robić wszystko od przetwarzania dźwięku w czasie
 rzeczywistym, do odtwarzania filmów i czegokolwiek innego związego z
 mediami. Architektura bazująca na wtyczkach pozwala na łatwe dodawanie
 nowych typów danych lub możliwości obróbki.
+
+%package apidocs
+Summary:	Ugly GStreamer streaming-media framework plugins API documentation
+Summary(pl.UTF-8):	Dokumentacja API brzydkich wtyczek środowiska obróbki strumieni GStreamer
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+Ugly GStreamer streaming-media framework plugins API documentation.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API brzydkich wtyczek środowiska obróbki strumieni
+GStreamer.
 
 ##
 ## Plugins
@@ -140,6 +154,7 @@ Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
+Requires:	libdvdread >= 0.5.0
 Obsoletes:	gstreamer-libdvdread < 0.11
 
 %description -n gstreamer-dvdread
@@ -154,6 +169,7 @@ Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca obraz MPEG
 Group:		Libraries
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
+Requires:	libmpeg2 >= 0.5.1
 
 %description -n gstreamer-mpeg
 Plugins for playing MPEG videos.
@@ -167,6 +183,7 @@ Summary(pl.UTF-8):	Wtyczka do GStreamera odtwarzająca muzykę Sid C64
 Group:		Libraries
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
+Requires:	libsidplay >= 1.36.57
 
 %description -n gstreamer-sid
 Plugin for playback of C64 SID format music files.
@@ -191,31 +208,32 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 %setup -q -n %{gstname}-%{version}
 
 %build
-%{__libtoolize}
-%{__aclocal} -I m4 -I common/m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	%{!?with_amr:--disable-amrnb --disable-amrwb} \
-	%{!?with_cdio:--disable-cdio} \
-	%{!?with_sid:--disable-sidplay} \
-	--disable-silent-rules \
-	--disable-static \
-	--enable-experimental \
-	--enable-gtk-doc \
-	--with-html-dir=%{_gtkdocdir}
+%meson build \
+	--default-library=shared \
+	%{!?with_amr:-Damrnb=disabled} \
+	%{!?with_amr:-Damrwbdec=disabled} \
+	%{!?with_cdio:-Dcdio=disabled} \
+	%{!?with_apidocs:-Ddoc=disabled} \
+	%{!?with_sid:-Dsidplay=disabled}
 
-%{__make}
+%ninja_build -C build
+
+%if %{with apidocs}
+cd build/docs
+for config in *-doc.json ; do
+	LC_ALL=C.UTF-8 hotdoc run --conf-file "$config"
+done
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%ninja_install -C build
 
-# We don't need plugins' *.la files
-%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/*.la
+%if %{with apidocs}
+install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+cp -pr build/docs/*-doc $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+%endif
 
 %find_lang %{gstname}-%{gstmver}
 
@@ -231,7 +249,24 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibdir}/libgstrealmedia.so
 %attr(755,root,root) %{gstlibdir}/libgstxingmux.so
 %{_datadir}/gstreamer-%{gstmver}/presets
-%{_gtkdocdir}/gst-plugins-ugly-plugins-1.0
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+%{_docdir}/gstreamer-%{gstmver}/a52dec-doc
+%{_docdir}/gstreamer-%{gstmver}/amrnb-doc
+%{_docdir}/gstreamer-%{gstmver}/amrwbdec-doc
+%{_docdir}/gstreamer-%{gstmver}/asf-doc
+%{_docdir}/gstreamer-%{gstmver}/cdio-doc
+%{_docdir}/gstreamer-%{gstmver}/dvdlpcmdec-doc
+%{_docdir}/gstreamer-%{gstmver}/dvdread-doc
+%{_docdir}/gstreamer-%{gstmver}/dvdsub-doc
+%{_docdir}/gstreamer-%{gstmver}/mpeg2dec-doc
+%{_docdir}/gstreamer-%{gstmver}/realmedia-doc
+%{_docdir}/gstreamer-%{gstmver}/sid-doc
+%{_docdir}/gstreamer-%{gstmver}/x264-doc
+%{_docdir}/gstreamer-%{gstmver}/xingmux-doc
+%endif
 
 ##
 ## Plugins
