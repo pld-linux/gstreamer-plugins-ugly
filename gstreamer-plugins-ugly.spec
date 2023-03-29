@@ -7,27 +7,26 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.20.0
-%define		gstpb_ver	1.20.0
+%define		gst_ver		1.22.0
+%define		gstpb_ver	1.22.0
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.20.5
+Version:	1.22.1
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	a1e665c39d446cfdf69190b3397c76da
+# Source0-md5:	847b0a30e5428987af87d0471365eba3
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.56.0
+BuildRequires:	glib2-devel >= 1:2.62.0
 BuildRequires:	gstreamer-devel >= %{gst_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
 %{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
-BuildRequires:	libcdio-devel
-BuildRequires:	meson >= 0.59
+BuildRequires:	meson >= 0.62
 BuildRequires:	ninja >= 1.5
 BuildRequires:	orc-devel >= 0.4.16
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -47,7 +46,7 @@ BuildRequires:	libmpeg2-devel >= 0.5.1
 # ABI 120
 BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
 %{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
-Requires:	glib2 >= 1:2.56.0
+Requires:	glib2 >= 1:2.62.0
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	orc >= 0.4.16
@@ -249,7 +248,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibdir}/libgstdvdlpcmdec.so
 %attr(755,root,root) %{gstlibdir}/libgstdvdsub.so
 %attr(755,root,root) %{gstlibdir}/libgstrealmedia.so
-%attr(755,root,root) %{gstlibdir}/libgstxingmux.so
 %{_datadir}/gstreamer-%{gstmver}/presets
 
 %if %{with apidocs}
@@ -267,7 +265,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/gstreamer-%{gstmver}/realmedia-doc
 %{_docdir}/gstreamer-%{gstmver}/sid-doc
 %{_docdir}/gstreamer-%{gstmver}/x264-doc
-%{_docdir}/gstreamer-%{gstmver}/xingmux-doc
 %endif
 
 ##
