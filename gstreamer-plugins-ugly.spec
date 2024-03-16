@@ -1,34 +1,33 @@
 #
 # Conditional build:
 %bcond_without	apidocs		# API documentation
-%bcond_without	amr		# AMR-NB/AMR-WB plugins
 %bcond_without	cdio		# cdio plugin
 %bcond_without	sid		# sid plugin
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.22.0
-%define		gstpb_ver	1.22.0
+%define		gst_ver		1.24.0
+%define		gstpb_ver	1.24.0
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.22.6
-Release:	2
+Version:	1.24.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	29026cd5b47384ad9c2a6ca98cba272b
+# Source0-md5:	a6bcb986c035bd58d62ac2accaa36bbc
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.62.0
+BuildRequires:	glib2-devel >= 1:2.64.0
 BuildRequires:	gstreamer-devel >= %{gst_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
 %{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
-BuildRequires:	meson >= 0.62
+BuildRequires:	meson >= 1.1
 BuildRequires:	ninja >= 1.5
-BuildRequires:	orc-devel >= 0.4.16
+BuildRequires:	orc-devel >= 0.4.38
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python3 >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
@@ -43,13 +42,12 @@ BuildRequires:	a52dec-libs-devel
 BuildRequires:	libdvdread-devel >= 0.5.0
 BuildRequires:	libmpeg2-devel >= 0.5.1
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
-# ABI 120
-BuildRequires:	libx264-devel >= 0.1.3-1.20111212_2245.1
-%{?with_amr:BuildRequires:	opencore-amr-devel >= 0.1.3}
-Requires:	glib2 >= 1:2.62.0
+# ABI 156
+BuildRequires:	libx264-devel >= 0.1.3-1.20190110_2245.1
+Requires:	glib2 >= 1:2.64.0
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
-Requires:	orc >= 0.4.16
+Requires:	orc >= 0.4.38
 Obsoletes:	gstreamer-asf < 0.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -100,34 +98,6 @@ Plugin for decoding of VOB files.
 
 %description -n gstreamer-a52dec -l pl.UTF-8
 Wtyczka dekodująca pliki VOB.
-
-%package -n gstreamer-amrnb
-Summary:	GStreamer AMR-NB decoder plugin
-Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-NB
-Group:		Libraries
-Requires:	gstreamer >= %{gst_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_ver}
-Requires:	opencore-amr >= 0.1.3
-
-%description -n gstreamer-amrnb
-Plugin for decoding of AMR-NB files.
-
-%description -n gstreamer-amrnb -l pl.UTF-8
-Wtyczka dekodująca pliki AMR-NB.
-
-%package -n gstreamer-amrwb
-Summary:	GStreamer AMR-WB decoder plugin
-Summary(pl.UTF-8):	Wtyczka do GStreamera dekodująca pliki AMR-WB
-Group:		Libraries
-Requires:	gstreamer >= %{gst_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_ver}
-Requires:	opencore-amr >= 0.1.3
-
-%description -n gstreamer-amrwb
-Plugin for decoding of AMR-WB files.
-
-%description -n gstreamer-amrwb -l pl.UTF-8
-Wtyczka dekodująca pliki AMR-WB.
 
 %package -n gstreamer-cdio
 Summary:	GStreamer plugin for CD audio input using libcdio
@@ -211,8 +181,6 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 %meson build \
 	-Dgpl=enabled \
 	--default-library=shared \
-	%{!?with_amr:-Damrnb=disabled} \
-	%{!?with_amr:-Damrwbdec=disabled} \
 	%{!?with_cdio:-Dcdio=disabled} \
 	%{!?with_apidocs:-Ddoc=disabled} \
 	%{!?with_sid:-Dsidplay=disabled}
@@ -221,7 +189,7 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 
 %if %{with apidocs}
 cd build/docs
-for config in *-doc.json ; do
+for config in plugin-*.json ; do
 	LC_ALL=C.UTF-8 hotdoc run --conf-file "$config"
 done
 %endif
@@ -233,7 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
-cp -pr build/docs/*-doc $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+for d in build/docs/plugin-* ; do
+	[ ! -d "$d" ] || cp -pr "$d" $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+done
 %endif
 
 %find_lang %{gstname}-%{gstmver}
@@ -253,18 +223,16 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%{_docdir}/gstreamer-%{gstmver}/a52dec-doc
-%{_docdir}/gstreamer-%{gstmver}/amrnb-doc
-%{_docdir}/gstreamer-%{gstmver}/amrwbdec-doc
-%{_docdir}/gstreamer-%{gstmver}/asf-doc
-%{_docdir}/gstreamer-%{gstmver}/cdio-doc
-%{_docdir}/gstreamer-%{gstmver}/dvdlpcmdec-doc
-%{_docdir}/gstreamer-%{gstmver}/dvdread-doc
-%{_docdir}/gstreamer-%{gstmver}/dvdsub-doc
-%{_docdir}/gstreamer-%{gstmver}/mpeg2dec-doc
-%{_docdir}/gstreamer-%{gstmver}/realmedia-doc
-%{_docdir}/gstreamer-%{gstmver}/sid-doc
-%{_docdir}/gstreamer-%{gstmver}/x264-doc
+%{_docdir}/gstreamer-%{gstmver}/plugin-a52dec
+%{_docdir}/gstreamer-%{gstmver}/plugin-asf
+%{_docdir}/gstreamer-%{gstmver}/plugin-cdio
+%{_docdir}/gstreamer-%{gstmver}/plugin-dvdlpcmdec
+%{_docdir}/gstreamer-%{gstmver}/plugin-dvdread
+%{_docdir}/gstreamer-%{gstmver}/plugin-dvdsub
+%{_docdir}/gstreamer-%{gstmver}/plugin-mpeg2dec
+%{_docdir}/gstreamer-%{gstmver}/plugin-realmedia
+%{_docdir}/gstreamer-%{gstmver}/plugin-sid
+%{_docdir}/gstreamer-%{gstmver}/plugin-x264
 %endif
 
 ##
@@ -274,16 +242,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gstreamer-a52dec
 %defattr(644,root,root,755)
 %attr(755,root,root) %{gstlibdir}/libgsta52dec.so
-
-%if %{with amr}
-%files -n gstreamer-amrnb
-%defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstamrnb.so
-
-%files -n gstreamer-amrwb
-%defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstamrwbdec.so
-%endif
 
 %if %{with cdio}
 %files -n gstreamer-cdio
