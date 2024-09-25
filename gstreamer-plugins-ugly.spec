@@ -12,12 +12,12 @@
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.24.7
+Version:	1.24.8
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	880ffe8dfee6f1dce2127190dbc3841d
+# Source0-md5:	c3c15565ad2f1da9d6523d82c66b7c47
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
