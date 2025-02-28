@@ -12,12 +12,12 @@
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.24.8
+Version:	1.24.12
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	c3c15565ad2f1da9d6523d82c66b7c47
+# Source0-md5:	f71b3812bc7c2a1364e8b8fa0a4bdc5a
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
@@ -31,7 +31,7 @@ BuildRequires:	orc-devel >= 0.4.38
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python3 >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 ##
@@ -178,14 +178,14 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 %setup -q -n %{gstname}-%{version}
 
 %build
-%meson build \
+%meson \
 	-Dgpl=enabled \
 	--default-library=shared \
 	%{!?with_cdio:-Dcdio=disabled} \
 	%{!?with_apidocs:-Ddoc=disabled} \
 	%{!?with_sid:-Dsidplay=disabled}
 
-%ninja_build -C build
+%meson_build -C build
 
 %if %{with apidocs}
 cd build/docs
@@ -197,7 +197,7 @@ done
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install -C build
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
