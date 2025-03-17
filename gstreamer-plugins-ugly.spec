@@ -6,18 +6,18 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.24.0
-%define		gstpb_ver	1.24.0
+%define		gst_ver		1.26.0
+%define		gstpb_ver	1.26.0
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.24.12
+Version:	1.26.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	f71b3812bc7c2a1364e8b8fa0a4bdc5a
+# Source0-md5:	d6c8e12dd135a52f976c9de9c379f101
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
@@ -25,9 +25,9 @@ BuildRequires:	glib2-devel >= 1:2.64.0
 BuildRequires:	gstreamer-devel >= %{gst_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
 %{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
-BuildRequires:	meson >= 1.1
+BuildRequires:	meson >= 1.4
 BuildRequires:	ninja >= 1.5
-BuildRequires:	orc-devel >= 0.4.38
+BuildRequires:	orc-devel >= 0.4.41
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python3 >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
@@ -47,7 +47,7 @@ BuildRequires:	libx264-devel >= 0.1.3-1.20190110_2245.1
 Requires:	glib2 >= 1:2.64.0
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
-Requires:	orc >= 0.4.38
+Requires:	orc >= 0.4.41
 Obsoletes:	gstreamer-asf < 0.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -179,15 +179,31 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 
 %build
 %meson \
-	-Dgpl=enabled \
 	--default-library=shared \
-	%{!?with_cdio:-Dcdio=disabled} \
-	%{!?with_apidocs:-Ddoc=disabled} \
-	%{!?with_sid:-Dsidplay=disabled}
+	-Da52dec=enabled \
+	-Dasfdemux=enabled \
+	-Ddvdlpcmdec=enabled \
+	-Ddvdread=enabled \
+	-Ddvdsub=enabled \
+	-Dcdio=%{__enabled_disabled cdio} \
+	-Ddoc=%{__enabled_disabled apidocs} \
+	-Dglib_debug=disabled \
+	-Dglib_assert=false \
+	-Dglib_checks=false \
+	-Dgpl=enabled \
+	-Dmpeg2dec=enabled \
+	-Dnls=enabled \
+	-Dorc=enabled \
+	-Drealmedia=enabled \
+	-Dsidplay=%{__enabled_disabled sid} \
+	-Dtests=disabled \
+	-Dx264=enabled
 
-%meson_build -C build
+%meson_build
 
 %if %{with apidocs}
+%meson_build build-hotdoc-configs
+
 cd build/docs
 for config in plugin-*.json ; do
 	LC_ALL=C.UTF-8 hotdoc run --conf-file "$config"
@@ -197,7 +213,7 @@ done
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%meson_install -C build
+%meson_install
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
