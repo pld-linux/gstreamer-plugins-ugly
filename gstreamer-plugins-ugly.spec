@@ -6,22 +6,23 @@
 
 %define		gstname		gst-plugins-ugly
 %define		gstmver		1.0
-%define		gst_ver		1.26.0
-%define		gstpb_ver	1.26.0
+%define		gst_ver		1.28.0
+%define		gstpb_ver	1.28.0
 
 Summary:	Ugly GStreamer Streaming-media framework plugins
 Summary(pl.UTF-8):	Brzydkie wtyczki do środowiska obróbki strumieni GStreamer
 Name:		gstreamer-plugins-ugly
-Version:	1.26.8
+Version:	1.28.3
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-ugly/%{gstname}-%{version}.tar.xz
-# Source0-md5:	28d79d52fac7bb05109661e55545440a
+# Source0-md5:	5206f9131dbafaa9758c878d2e43a00f
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.64.0
+BuildRequires:	gcc >= 6:4.7
+BuildRequires:	glib2-devel >= 1:2.67.4
 BuildRequires:	gstreamer-devel >= %{gst_ver}
 BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_ver}
 %{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
@@ -44,7 +45,7 @@ BuildRequires:	libmpeg2-devel >= 0.5.1
 %{?with_sid:BuildRequires:	libsidplay-devel >= 1.36.57}
 # ABI 156
 BuildRequires:	libx264-devel >= 0.1.3-1.20190110_2245.1
-Requires:	glib2 >= 1:2.64.0
+Requires:	glib2 >= 1:2.67.4
 Requires:	gstreamer >= %{gst_ver}
 Requires:	gstreamer-plugins-base >= %{gstpb_ver}
 Requires:	orc >= 0.4.41
@@ -194,6 +195,7 @@ Wtyczka do GStreamera kodująca przy użyciu biblioteki x264.
 	-Dmpeg2dec=enabled \
 	-Dnls=enabled \
 	-Dorc=enabled \
+	-Dorc-compiler=enabled \
 	-Drealmedia=enabled \
 	-Dsidplay=%{__enabled_disabled sid} \
 	-Dtests=disabled \
@@ -229,11 +231,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{gstname}-%{gstmver}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README.md RELEASE
-%attr(755,root,root) %{gstlibdir}/libgstasf.so
-%attr(755,root,root) %{gstlibdir}/libgstdvdlpcmdec.so
-%attr(755,root,root) %{gstlibdir}/libgstdvdsub.so
-%attr(755,root,root) %{gstlibdir}/libgstrealmedia.so
+%doc ChangeLog README.md RELEASE
+%{gstlibdir}/libgstasf.so
+%{gstlibdir}/libgstdvdlpcmdec.so
+%{gstlibdir}/libgstdvdsub.so
+%{gstlibdir}/libgstrealmedia.so
 %{_datadir}/gstreamer-%{gstmver}/presets
 
 %if %{with apidocs}
@@ -257,28 +259,28 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n gstreamer-a52dec
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgsta52dec.so
+%{gstlibdir}/libgsta52dec.so
 
 %if %{with cdio}
 %files -n gstreamer-cdio
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstcdio.so
+%{gstlibdir}/libgstcdio.so
 %endif
 
 %files -n gstreamer-dvdread
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstdvdread.so
+%{gstlibdir}/libgstdvdread.so
 
 %files -n gstreamer-mpeg
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstmpeg2dec.so
+%{gstlibdir}/libgstmpeg2dec.so
 
 %if %{with sid}
 %files -n gstreamer-sid
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstsid.so
+%{gstlibdir}/libgstsid.so
 %endif
 
 %files -n gstreamer-x264
 %defattr(644,root,root,755)
-%attr(755,root,root) %{gstlibdir}/libgstx264.so
+%{gstlibdir}/libgstx264.so
